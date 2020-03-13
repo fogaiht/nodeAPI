@@ -11,15 +11,16 @@ const UserSchema = new Schema({
     created:  {type: Date, default: Date.now},
 });
 
-UserSchema.pre('save',  function(next) {
+UserSchema.pre('save',  async function(next) {
     let user = this;
     if (!user.isModified('password')) return next()
-    bcrypt.hash(user.password, 10, (err, encrypted) => {
-        user.password = encrypted
-        return next()
-    })    
-   user.pokemonList =  user.pokemonList.map(obj => {
+
+    user.pokemonList =  await user.pokemonList.map(obj => {
         return obj = "https://pokeapi.co/api/v2/pokemon/" + obj
     })
+
+    user.password = await bcrypt.hash(user.password, 10)
+    return next()   
 })
+
 module.exports = mongoose.model('User', UserSchema);
