@@ -45,10 +45,12 @@ router.post("/addPokemon", auth, async (req, res) => {
     return res.status(400).send({ error: "Dados insuficientes!" });
   try {
     const user = await Users.findById({ _id: res.locals.auth_data.id });
+    var duplicatePokemon = false
     user.pokemonList.map(item => {
       if (item.id == pokeNumber)
-        return res.status(200).send({ error: "Pokemon já adicionado!" });
+        return duplicatePokemon = true
     });
+    if(duplicatePokemon) return res.status(200).send({ error: "Pokemon já adicionado!" });
     const response = await fetch(config.poke_api_url + pokeNumber);
     var pokemon = await response.json();
 
