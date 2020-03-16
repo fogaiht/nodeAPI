@@ -5,6 +5,7 @@ const config = require("../config/config");
 const fetch = require("node-fetch");
 
 const UserSchema = new Schema({
+  name: { type: String, required: true },
   email: { type: String, required: true, unique: true, lowercase: true },
   password: { type: String, required: true, select: false },
   pokemonList: {
