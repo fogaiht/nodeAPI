@@ -13,7 +13,7 @@ const createUserToken = (userId) => {
 
 router.get('/', auth, async (req, res) =>{
     try {
-        if(res.locals.auth_data.id == "5e6bec9923e7c7124c7bbc4a") {
+        if(res.locals.auth_data.id == "5e6bf2b30ea1a02d08cea0ad") {
             const users = await Users.find({})
             return res.send(users)
         }else {
@@ -34,14 +34,13 @@ router.get('/findUserById', auth, async (req,res) => {
 })
 
 
-
 router.post('/addPokemon', auth, async (req,res) => {
     const {pokeNumber} = req.body
     if (!pokeNumber) return res.status(400).send({error: "Dados insuficientes!"})
     try {
         const user = await Users.findById({_id: res.locals.auth_data.id})        
         if(user.pokemonList.includes(config.poke_api_url+pokeNumber))
-            return res.status(400).send({error: "Pokemon já adicionado!"}) 
+            return res.status(200).send({error: "Pokemon já adicionado!"}) 
         await Users.findByIdAndUpdate(res.locals.auth_data.id, {$push: {pokemonList: config.poke_api_url+pokeNumber}})
         return res.status(200).send({message: "Pokemon adicionado com sucesso!"})
     } catch (err) {
