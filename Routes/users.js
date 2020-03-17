@@ -42,7 +42,8 @@ router.post('/addPokemon', auth, async (req,res) => {
         if(user.pokemonList.includes(config.poke_api_url+pokeNumber))
             return res.status(200).send({error: "Pokemon já adicionado!"}) 
         await Users.findByIdAndUpdate(res.locals.auth_data.id, {$push: {pokemonList: config.poke_api_url+pokeNumber}})
-        return res.status(200).send({message: "Pokemon adicionado com sucesso!"})
+        // const user = await Users.findById({_id: res.locals.auth_data.id})
+        return res.status(200).send(user)
     } catch (err) {
         if(err) res.status(500).send({ error: "Erro ao buscar usuário!" + err})
     }
